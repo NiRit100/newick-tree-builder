@@ -1,4 +1,3 @@
-from node import Node
 from collections.abc import Mapping
 from nhx_util import generate_nhx
 
@@ -7,7 +6,7 @@ class Node:
     Represents a single node in the tree.
     """
     
-    _DEFAULT_OUTPUTLABEL_MAPPER:Mapping[Node,str] = lambda n: n.get_label()
+    _DEFAULT_OUTPUTLABEL_MAPPER:Mapping['Node',str] = lambda n: n.get_label()
     
     
     # class fields
@@ -94,7 +93,7 @@ class Node:
         """
         return label in self._children_by_label.keys
     
-    def get_child_by_label(self, label:str) -> Node:
+    def get_child_by_label(self, label:str) -> 'Node':
         """Gets the child node with the given label.
 
         Args:
@@ -110,7 +109,7 @@ class Node:
         else:
             return None
     
-    def add_child(self, child:Node) -> bool:
+    def add_child(self, child:'Node') -> bool:
         """
         Adds the `child` node to `self`'s children. 
         
@@ -131,7 +130,7 @@ class Node:
     
     
     
-    def handle_duplicate(self, other:Node):
+    def handle_duplicate(self, other:'Node'):
         """
         Handles the case when a second node with the same `label` as 
         `self`'s was to be added to the parent, which is forbidden. 
@@ -189,7 +188,7 @@ class Node:
                   with_labels:bool=True,
                   with_distances:bool=True,
                   with_additional_info_nhx:bool=False,
-                  outputlabel_mapper:Mapping[Node,str]=_DEFAULT_OUTPUTLABEL_MAPPER) -> str:
+                  outputlabel_mapper:Mapping['Node',str]=_DEFAULT_OUTPUTLABEL_MAPPER) -> str:
         """
         Generates a string representation of `self` and its 
         children in newick format.
