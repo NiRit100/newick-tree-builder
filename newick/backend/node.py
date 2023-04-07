@@ -1,5 +1,5 @@
 from collections.abc import Mapping
-from nhx_util import generate_nhx
+from .nhx_util import generate_nhx
 
 class Node:
     """
