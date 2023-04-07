@@ -1,4 +1,4 @@
-from NewickTreeBuilder.node import Node
+from newick.backend.node import Node
 
 
 def test_simple_instantiation():
