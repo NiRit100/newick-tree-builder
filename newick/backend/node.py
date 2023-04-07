@@ -76,10 +76,13 @@ class Node:
         # write to class members
         self._distance          = distance
         self._label             = label
-        self._children          = children
         self._dupcount          = duplicates_count
         self._additional_info   = additional_info
-        self._children_by_label = dict() # maps label to index in list
+        # handle children
+        self._children          = []
+        self._children_by_label = dict() # maps label to index of _children
+        for c in children:
+            self.add_child(c)
         
     
     def contains_child_with_label(self, label:str) -> bool:
@@ -99,7 +102,15 @@ class Node:
         Returns:
             int: The number of children `self` has.
         """
-        return len(self._children)
+        return len(self._children_by_label)
+    
+    def is_leaf(self) -> bool:
+        """Determines whether this node is a leaf or not.
+
+        Returns:
+            bool: Return True iff `self` has no children.
+        """ 
+        return self.count_children() == 0
     
     def get_child_by_label(self, label:str) -> 'Node':
         """Gets the child node with the given label.
@@ -239,6 +250,7 @@ class Node:
         if len(self._children) > 0:
             ret_ch = []
             for child in self._children:
+                #ret_ch.append(child._label)
                 ret_ch.append(
                     child.to_string(with_labels, 
                                     with_distances, 
@@ -251,11 +263,11 @@ class Node:
         if with_additional_info_nhx:
             ret.append(generate_nhx(self.get_additional_info()))
         if with_distances:
-            ret.append(':' + format(self.get_distance(), 'f'))
+            ret.append(':' + format(self.get_distance(), 'f').rstrip('0').rstrip('.'))
         # convert to string and return
         return ''.join(ret)
     
-            
+    
     def __repr__(self) -> str:
         """`to_string()` with default settings.
 
@@ -265,4 +277,3 @@ class Node:
                 default settings.
         """
         return self.to_string()
-    
