@@ -91,7 +91,7 @@ class Node:
         Returns:
             bool: `True` iff a child with that `label` does exist here.
         """
-        return label in self._children_by_label.keys
+        return label in self._children_by_label.keys()
     
     def count_children(self) -> int:
         """Counts `self`'s children.
