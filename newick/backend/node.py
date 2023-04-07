@@ -93,6 +93,14 @@ class Node:
         """
         return label in self._children_by_label.keys
     
+    def count_children(self) -> int:
+        """Counts `self`'s children.
+
+        Returns:
+            int: The number of children `self` has.
+        """
+        return len(self._children)
+    
     def get_child_by_label(self, label:str) -> 'Node':
         """Gets the child node with the given label.
 
