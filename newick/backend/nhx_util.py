@@ -3,9 +3,9 @@ def generate_nhx(dict:dict, ext_head='&&NHX') -> str:
         return "[" + ext_head + "]"
     else:
         ret_elements = []
-        for key in dict.keys:
+        for key in dict.keys():
             str_key = nhx_filter_str(str(key))
-            str_val = nhx_filter_str(dict[key])
+            str_val = nhx_filter_str(str(dict[key]))
             str_el = str_key + '=' + str_val
             ret_elements.append(str_el)
         str_elements = ':'.join(ret_elements)
@@ -19,11 +19,12 @@ def nhx_filter_str(string:str):
         sym_no_escape =  {'_', '-', '.', '+', '?', '!', '#', '~', 
                         '\'', '%', '§', '$', '€', '&', '/', '@', 
                         '*', ' '}
-    last_c = ''
-    for c in string:
+    skipset = set()
+    mod_string = string
+    for c in set(string):
         if          not c.isalnum() \
                 and not c in sym_no_escape \
-                and not last_c == '\\':
-            string.replace(c, '\\'+c)
-        last_c = c
-    return string
+                and not c in skipset:
+            mod_string = mod_string.replace(c, '\\'+c)
+            skipset.add(c)
+    return mod_string

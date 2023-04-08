@@ -93,7 +93,7 @@ def test_repr_labels_only_on_leaves_afew():
     node0 = Node("A")
     node1 = Node("B", distance=2)
     node2 = Node("C", distance=1.2)
-    node3 = Node("D", distance=5)
+    node3 = Node("A", distance=5)
     node4 = Node("E")
     node5 = Node("F", distance=4.2)
     node2.add_child(node3)
@@ -101,6 +101,14 @@ def test_repr_labels_only_on_leaves_afew():
     node1.add_child(node2)
     node0.add_child(node5)
     node0.add_child(node1)
-    only_leaves_name_mapper = lambda n:  n.get_label() if n.is_leave() else ""
-    assert node0.to_string(outputlabel_mapper=only_leaves_name_mapper) == "(F:4.2,((D:5,E:1):1.2):2):1"
+    only_leaves_name_mapper = lambda n:  n.get_label() if n.is_leaf() else ""
+    assert node0.to_string(outputlabel_mapper=only_leaves_name_mapper) == "(F:4.2,((A:5,E:1):1.2):2):1"
     
+def test_duplicates():
+    node0 = Node("A")
+    node1 = Node("B", distance=2)
+    node2 = Node("B")
+    assert node0.add_child(node1)
+    assert not node0.add_child(node2)
+    assert str(node0) == "(B:2)A:1"
+    assert node1.get_duplication_count() == 1
