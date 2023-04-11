@@ -1,5 +1,5 @@
 from collections.abc import Mapping
-from typing import Callable
+from typing import Callable, Iterable
 from os import linesep
 from .node import Node, HybridNode, RootNode
 from .path import Path
@@ -90,7 +90,7 @@ class Tree:
             return dist
     
     
-    def add_new_node(self, path:Path, additional_info:dict = dict()) -> bool:
+    def add_new_node(self, path:Path, additional_info:dict=dict()) -> bool:
         """TODO:
 
         Args:
@@ -127,6 +127,44 @@ class Tree:
                                      self._dist_adjust_strat)
             cpath = cpath[1:]
         return cret
+    
+    def add_new_hybrid_node(self, paths:Iterable[str], additional_info:dict=dict()) -> bool:
+        """TODO:
+
+        Args:
+            paths (Iterable[str]): _description_
+            additional_info (dict, optional): _description_. Defaults to dict().
+
+        Returns:
+            bool: _description_
+        """
+        ret = True
+        for path in paths:
+            cparent = self._root
+            cret = False
+            # check root
+            if (len(path) <= 1):
+                msg = \
+                    "Cannot insert a node with a path shorter than 2 waypoints."
+                raise ValueError(path, msg)
+            if (self._root.get_label(), self._root.get_distance()) != path[0]:
+                msg = \
+                    "The start waypoint of the path differs from the tree's root."
+                raise ValueError(path, msg)
+            # insert rest
+            cpath = path[1:]
+            while len(cpath) > 0:
+                wlabel, wdist = cpath[0]
+                wdist = self.node_dist_or_def(wdist)    
+                waddinfo = additional_info if len(path) == 1 else dict()
+                wchild = Node(wlabel, 
+                            distance=wdist, 
+                            additional_info=waddinfo)
+                cret = cparent.add_child(wchild, 
+                                        self._dist_adjust_strat)
+                cpath = cpath[1:]
+            ret &= cret
+        return ret
     
     
     def to_string(self,

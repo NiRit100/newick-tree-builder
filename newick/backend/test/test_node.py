@@ -1,6 +1,9 @@
 from newick.backend.node import Node
 
 
+# BASIC TESTS
+
+
 def test_simple_instantiation_and_parenting():
     # label only
     node0 = Node("testa")
@@ -112,3 +115,7 @@ def test_duplicates():
     assert not node0.add_child(node2)
     assert str(node0) == "(B:2)A:1"
     assert node1.get_duplication_count() == 1
+    
+    
+# HYBRID NODE TESTS
+
