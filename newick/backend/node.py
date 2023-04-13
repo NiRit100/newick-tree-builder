@@ -359,7 +359,7 @@ class Node:
             if outputlabel_mapper:
                 ret.append(outputlabel_mapper(self))
             else:
-                ret.append(self._DEFAULT_OUTPUTLABEL_MAPPER(self))
+                ret.append(self._DEFAULT_OUTPUTLABEL_MAPPER())
         if with_additional_info_nhx:
             ret.append(generate_nhx(self.get_additional_info()))
         if with_distances:
@@ -630,7 +630,10 @@ class RootNode(Node):
             ret.append('(' + ','.join(ret_ch) + ')')
         # append own info
         if with_labels:
-            ret.append(outputlabel_mapper(self))
+            if outputlabel_mapper:
+                ret.append(outputlabel_mapper(self))
+            else:
+                ret.append(self._DEFAULT_OUTPUTLABEL_MAPPER())
         if with_additional_info_nhx:
             ret.append(generate_nhx(self.get_additional_info()))
         # convert to string and return

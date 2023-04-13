@@ -90,6 +90,8 @@ class Tree:
             return dist
     
     
+    RootNode = RootNode
+    
     def add_new_node(self, path:Path, additional_info:dict=dict()) -> bool:
         """TODO:
 
@@ -157,9 +159,9 @@ class Tree:
                 wlabel, wdist = cpath[0]
                 wdist = self.node_dist_or_def(wdist)    
                 waddinfo = additional_info if len(path) == 1 else dict()
-                wchild = Node(wlabel, 
-                            distance=wdist, 
-                            additional_info=waddinfo)
+                wchild = HybridNode(wlabel, 
+                                    distance=wdist, 
+                                    additional_info=waddinfo)
                 cret = cparent.add_child(wchild, 
                                         self._dist_adjust_strat)
                 cpath = cpath[1:]

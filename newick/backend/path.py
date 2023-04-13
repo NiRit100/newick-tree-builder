@@ -8,7 +8,9 @@ class Path:
     #_distances:list = list()
     
     
-    def __init__(self, root_label = None):
+    def __init__(self, 
+                 root_label=None,
+                 points:list[tuple[str,float]]=[]):
         self._waypoints = list()
         self._distances = list()
         if root_label:
@@ -17,13 +19,15 @@ class Path:
         else:
             self._waypoints.append("")
             self._distances.append(0.0)
+        for w, d in points:
+            self.add(w, d)
     
     
     def __len__(self):
         return len(self._waypoints)
     
     def __getitem__(self, key):
-        return (self._waypoints[key], self._distances[key])
+        return [(self._waypoints[i], self._distances[i]) for i in range(len(self))][key]
     
     def __contains__(self, item):
         if      isinstance(item, str):
@@ -38,7 +42,7 @@ class Path:
             raise TypeError(item, "unexpected item type")
     
     def __iter__(self):
-        yield from zip(self._waypoints, self._distances)
+        yield from [(self._waypoints[i], self._distances[i]) for i in range(len(self))]
         
         
     def __repr__(self):

@@ -15,6 +15,5 @@ def test_generate_nhx_othersym():
     assert generate_nhx(dct) == "[&&NHX:A\\=C=1:B\\:nn=B\\(er\\)lin:new\\\n-line=s p a c e]"
     
 def test_nhx_filter_str_0():
-    import pdb; pdb.set_trace()
     assert nhx_filter_str("A=C") == "A\\=C"
     
