@@ -111,8 +111,8 @@ def test_duplicates():
     node0 = Node("A")
     node1 = Node("B", distance=2)
     node2 = Node("B")
-    assert node0.add_child(node1)
-    assert not node0.add_child(node2)
+    assert node0.add_child(node1)[0]
+    assert not node0.add_child(node2)[0]
     assert str(node0) == "(B:2)A:1"
     assert node1.get_duplication_count() == 1
     

@@ -14,23 +14,24 @@ class Tree:
     
     # class fields
     #_root
+    #_hybrids  # dict[(str, int), HybridNode] # TODO:
     #_hybrid_ignore_set
     #_default_dist
     #_dist_adjust_strat
   
   
-    def _DIST_ADJUST_STRAT_NEW_fn(old_node:Node, new_dist:float, is_end_of_path:bool) -> float:
+    def _DIST_ADJUST_STRAT_NEW_fn(old_node:Node, new_dist:float) -> float:
         return new_dist
     _DIST_ADJUST_STRAT_NEW=_DIST_ADJUST_STRAT_NEW_fn
     
-    def _DIST_ADJUST_STRAT_OLD_fn(old_node:Node, new_dist:float, is_end_of_path:bool) -> float:
+    def _DIST_ADJUST_STRAT_OLD_fn(old_node:Node, new_dist:float) -> float:
         return new_dist
     _DIST_ADJUST_STRAT_OLD = _DIST_ADJUST_STRAT_OLD_fn
     
-    def _DIST_ADJUST_STRAT_ROLL2_fn(old_node:Node, new_dist:float, is_end_of_path:bool) -> float:
+    def _DIST_ADJUST_STRAT_ROLL2_fn(old_node:Node, new_dist:float) -> float:
         return (old_node.get_distance() + new_dist) / 2
         
-    def _DIST_ADJUST_STRAT_AVERAGE_fn(old_node:Node, new_dist:float, is_end_of_path:bool) -> float:
+    def _DIST_ADJUST_STRAT_AVERAGE_fn(old_node:Node, new_dist:float) -> float:
         weighted_old_dist = (old_node.get_distance() * (old_node.get_duplication_count()+1))
         return (weighted_old_dist + new_dist) / (old_node.get_duplication_count()+2)
     _DIST_ADJUST_STRAT_AVERAGE=_DIST_ADJUST_STRAT_AVERAGE_fn
@@ -79,6 +80,7 @@ class Tree:
         self._root = root_node
         self._default_dist = default_dist
         self._dist_adjust_strat = dist_adjust_strategy
+        self._hybrids = dict()
         self._hybrid_ignore_set = set()
 
     
@@ -91,6 +93,31 @@ class Tree:
     
     
     RootNode = RootNode
+    
+    
+    def reg_hybrid_id(self,
+                      label:str,
+                      hybrid_id:int,
+                      distance:float,
+                      additional_info:dict) -> HybridNode:
+        """For internal use only.
+
+        Returns:
+            HybridNode: 
+                The HybridNode instance with the given label and id
+                that is already present in the tree, or a newly created
+                one if it is not registered yet.
+        """
+        if (label, hybrid_id) in self._hybrids.keys:
+            return self._hybrids[(label, hybrid_id)]
+        else:
+            wchild = HybridNode(label,
+                                hybrid_id,
+                                distance, 
+                                additional_info)
+            self._hybrids[(label, hybrid_id)] = wchild
+            return wchild
+     
     
     def add_new_node(self, path:Path, additional_info:dict=dict()) -> bool:
         """TODO:
@@ -125,12 +152,13 @@ class Tree:
             wchild = Node(wlabel, 
                           distance=wdist, 
                           additional_info=waddinfo)
-            cret = cparent.add_child(wchild, 
+            cret, achild = cparent.add_child(wchild, 
                                      self._dist_adjust_strat)
             cpath = cpath[1:]
+            cparent = achild
         return cret
     
-    def add_new_hybrid_node(self, paths:Iterable[str], additional_info:dict=dict()) -> bool:
+    def add_new_hybrid_node(self, paths:Iterable[str], hybrid_id=-1, additional_info:dict=dict()) -> bool:
         """TODO:
 
         Args:
@@ -159,12 +187,14 @@ class Tree:
                 wlabel, wdist = cpath[0]
                 wdist = self.node_dist_or_def(wdist)    
                 waddinfo = additional_info if len(path) == 1 else dict()
-                wchild = HybridNode(wlabel, 
-                                    distance=wdist, 
-                                    additional_info=waddinfo)
-                cret = cparent.add_child(wchild, 
-                                        self._dist_adjust_strat)
+                wchild = self.reg_hybrid_id(wlabel, 
+                                            hybrid_id,
+                                            distance=wdist, 
+                                            additional_info=waddinfo)
+                cret, achild = cparent.add_child(wchild, 
+                                         self._dist_adjust_strat)
                 cpath = cpath[1:]
+                cparent = achild
             ret &= cret
         return ret
     

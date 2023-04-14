@@ -152,7 +152,7 @@ class Node:
     
     def add_child(self, 
                   child:'Node', 
-                  dist_adjust_strategy=None) -> bool:
+                  dist_adjust_strategy=None) -> tuple[bool,'Node']:
         """
         Adds the `child` node to `self`'s children. 
         
@@ -177,15 +177,15 @@ class Node:
         if not self.contains_child_with_label(child.get_label()):
             self._children_by_label[child.get_label()] = len(self._children)
             self._children.append(child)
-            return True
+            return (True, child)
         else:
             ochild = self.get_child_by_label(child.get_label())
-            ochild.handle_duplicate(child)
             if dist_adjust_strategy:
                 adjusted_dist = dist_adjust_strategy(ochild, 
                                                      child.get_distance())
                 ochild.set_distance(adjusted_dist)
-            return False
+            ochild.handle_duplicate(child)
+            return (False, ochild)
     
     
     def handle_duplicate(self, other:'Node'):
@@ -245,7 +245,7 @@ class Node:
         """
         return self._distance
     
-    def set_distance(self, val):
+    def set_distance(self, distance):
         """
         Sets the distanec of `self` to the given `val`.
         """
@@ -257,7 +257,7 @@ class Node:
                 Distance from parent node must be positive.
                 """ 
             raise ValueError(distance, msg)
-        self._distance = val
+        self._distance = distance
 
     def get_duplication_count(self) -> int:
         """Retrieves the duplicate counter's value.

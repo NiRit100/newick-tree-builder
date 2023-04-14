@@ -49,7 +49,7 @@ class Path:
         ret_strs = []
         for w,d in self:
             ret_strs.append(w + ":" + format_float(d))
-        return " -> ".join(ret_strs)
+        return type(self).__name__ + "(" + " -> ".join(ret_strs) + ")"
     
     
     def add(self,
@@ -66,7 +66,7 @@ class Path:
                 `Tree`'s `default_distance`. 
                 Defaults to `float('-inf')`.
         """
-        self._waypoints.append(waypoint)
-        self._distances.append(distance)
+        self._waypoints.append(str(waypoint))
+        self._distances.append(float(distance))
     
     
