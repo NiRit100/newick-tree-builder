@@ -27,10 +27,10 @@ def test_partial_duplicate_no_dist_def():
     t.add_new_node(Path("R", [("A", 1.0)]))
     t.add_new_node(Path("R", [("B", 4.0)]))
     t.add_new_node(Path("R", [("B", float("-inf")), ("C-c", 2.2)]))
-    assert t.to_string() == "(A:1,(C-c:2.2)B:4)R;" # note: dist of B changed
+    assert t.to_string() == "(A:1,(C-c:2.2)B:4)R;"
     assert t._root.get_child_by_label("B").get_duplication_count() == 0
     t.add_new_node(Path("R", [("B", float("-inf"))]))
-    assert t.to_string() == "(A:1,(C-c:2.2)B:4)R;" # note: changed again
+    assert t.to_string() == "(A:1,(C-c:2.2)B:4)R;"
     assert t._root.get_child_by_label("B").get_duplication_count() == 1
     
 def test_exact_duplicate():

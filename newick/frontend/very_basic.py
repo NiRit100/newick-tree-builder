@@ -5,11 +5,11 @@ from newick.backend.util_funcs import format_int
 
 
 def tree_parse_basic(text:str, 
-                root_label:str=None, 
-                line_delim:str=";", 
-                waypoint_sep:str=",",
-                label_dist_sep:str=":", 
-                trim_sym:list[str]=['\r', '\n', ' ']) -> Tree:
+                     root_label:str=None, 
+                     line_delim:str=";", 
+                     waypoint_sep:str=",",
+                     label_dist_sep:str=":", 
+                     trim_sym:list[str]=['\r', '\n', ' ']) -> Tree:
     index = 0
     lines = text.split(line_delim)
     outtree = Tree(RootNode(root_label))
@@ -27,7 +27,8 @@ def tree_parse_basic(text:str,
                 ndist = float(waypoint_split[1])
             nlabel = waypoint_split[0]
             outpath.add(nlabel, ndist)
+        myaddinfo = {"_parse_index": { format_int(index) }}
         outtree.add_new_node(outpath, 
-                             additional_info={"index": { format_int(index) }})
+                             additional_info=myaddinfo)
         index += 1
     return outtree

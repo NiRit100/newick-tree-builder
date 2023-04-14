@@ -512,6 +512,22 @@ class HybridNode(Node):
                                       with_distances,
                                       with_additional_info_nhx,
                                       outputlabel_mapper)
+                
+    
+    def to_string(self,
+                  with_labels:bool=True,
+                  with_distances:bool=True,
+                  with_additional_info_nhx:bool=False,
+                  outputlabel_mapper:Mapping['Node',str]=None) -> str:
+        # only print distance when first appearance
+        hid_str = self.gen_hybrid_id_string()
+        m_with_distances = with_distances and \
+                hid_str in self._hybrid_ignore_pool
+        return super(HybridNode, self) \
+                    .to_string(with_labels,
+                               m_with_distances,
+                               with_additional_info_nhx,
+                               outputlabel_mapper)
 
 
 class RootNode(Node):

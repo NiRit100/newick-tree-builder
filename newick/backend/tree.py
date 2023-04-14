@@ -133,17 +133,30 @@ class Tree:
      
     
     def add_new_node(self, path:Path, additional_info:dict=dict()) -> bool:
-        """TODO:
+        """
+        Adds a new node to the tree if it does not exist yet in the 
+        location determined by the `path`.
+        Also attaches the given additional info.
+        If the node is already present, by default
+         * duplication is counted
+         * distance is adjusted by the tree's strategy, if a distance
+           is given
+         * additional info is being copied over (lists and sets are merged)
 
         Args:
-            path (Path): _description_
-            additional_info (dict, optional): _description_. Defaults to dict().
+            path (Path): 
+                Path where to place the node.
+            additional_info (dict, optional): 
+                Additional info dict to attach
 
         Raises:
-            ValueError: _description_
+            ValueError: When the given path is too short or the root does 
+            not match.
 
         Returns:
-            bool: _description_
+            bool: 
+                True iff the node has been created, False if it had to be 
+                merged.
         """
         cparent = self._root
         cret = False
@@ -163,7 +176,7 @@ class Tree:
             wlabel, wdist = cpath[0]
             w_dist_adjust_strat = self.dist_adjust_strat_or_def(wdist)
             wdist = self.node_dist_or_def(wdist)    
-            waddinfo = additional_info if len(path) == 1 else dict()
+            waddinfo = additional_info if is_end_of_path else dict()
             wchild = Node(wlabel, 
                           distance=wdist, 
                           additional_info=waddinfo)
@@ -175,16 +188,33 @@ class Tree:
         return cret
     
     def add_new_hybrid_node(self, paths:Iterable[str], hybrid_id=-1, additional_info:dict=dict()) -> bool:
-        """TODO:
+        """
+        Adds a new hybrid node to the tree if it does not exist yet in the 
+        locations determined by the `path`.
+        Also attaches the given additional info.
+        If the node is already present, by default
+         * duplication is counted
+         * distance is adjusted by the tree's strategy, if a distance
+           is given
+         * additional info is being copied over (lists and sets are merged)
 
         Args:
-            paths (Iterable[str]): _description_
-            additional_info (dict, optional): _description_. Defaults to dict().
+            path (Iterable[Path]): 
+                Collection of paths where to place the node.
+            additional_info (dict, optional): 
+                Additional info dict to attach
+
+        Raises:
+            ValueError: When the given path is too short or the root does 
+            not match.
 
         Returns:
-            bool: _description_
+            bool: 
+                True iff the node was inserted in at least one location, 
+                otherwise False.
         """
-        ret = True
+        ret = False
+        is_first_path = True
         for path in paths:
             cparent = self._root
             cret = False
@@ -204,7 +234,10 @@ class Tree:
                 wlabel, wdist = cpath[0]
                 w_dist_adjust_strat = self.dist_adjust_strat_or_def(wdist)
                 wdist = self.node_dist_or_def(wdist)    
-                waddinfo = additional_info if len(path) == 1 else dict()
+                if is_end_of_path and is_first_path:
+                    waddinfo = additional_info
+                else:
+                    waddinfo = dict()
                 wchild = self.reg_hybrid_id(wlabel, 
                                             hybrid_id,
                                             distance=wdist, 
@@ -214,7 +247,8 @@ class Tree:
                                          count_duplicate=is_end_of_path)
                 cpath = cpath[1:]
                 cparent = achild
-            ret &= cret
+            ret |= cret
+            is_first_path = False
         return ret
     
     
