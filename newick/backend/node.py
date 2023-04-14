@@ -51,10 +51,9 @@ class Node:
         """
         
         # argument validation
-        if not isinstance(label, str):
-            if label == None:
-                label = ""
-            else:
+        if label == None:
+            label = ""
+        elif not isinstance(label, str):
                 label = str(label)
         if not isinstance(distance, float):
             distance = float(distance)
