@@ -90,6 +90,19 @@ class Tree:
             return self._default_dist
         else:
             return dist
+        
+    def dist_adjust_strat_or_def(self, 
+                                 dist:float):
+        """
+        Returns the distance adjustment function only if the given 
+        distance is not default (`float("-inf")`).
+        This is to prevent distance adjustments after first definition
+        if no explicit distances are given. 
+        """
+        if dist == float("-inf"):
+            return None
+        else:
+            return self._dist_adjust_strat
     
     
     RootNode = RootNode
@@ -148,14 +161,15 @@ class Tree:
         while len(cpath) > 0:
             is_end_of_path = (len(cpath) == 1)
             wlabel, wdist = cpath[0]
+            w_dist_adjust_strat = self.dist_adjust_strat_or_def(wdist)
             wdist = self.node_dist_or_def(wdist)    
             waddinfo = additional_info if len(path) == 1 else dict()
             wchild = Node(wlabel, 
                           distance=wdist, 
                           additional_info=waddinfo)
             cret, achild = cparent.add_child(wchild, 
-                                     self._dist_adjust_strat,
-                                     handle_duplicate=is_end_of_path)
+                                     w_dist_adjust_strat,
+                                     count_duplicate=is_end_of_path)
             cpath = cpath[1:]
             cparent = achild
         return cret
@@ -188,6 +202,7 @@ class Tree:
             while len(cpath) > 0:
                 is_end_of_path = (len(cpath) == 1)
                 wlabel, wdist = cpath[0]
+                w_dist_adjust_strat = self.dist_adjust_strat_or_def(wdist)
                 wdist = self.node_dist_or_def(wdist)    
                 waddinfo = additional_info if len(path) == 1 else dict()
                 wchild = self.reg_hybrid_id(wlabel, 
@@ -195,8 +210,8 @@ class Tree:
                                             distance=wdist, 
                                             additional_info=waddinfo)
                 cret, achild = cparent.add_child(wchild, 
-                                         self._dist_adjust_strat,
-                                         handle_duplicate=is_end_of_path)
+                                         w_dist_adjust_strat,
+                                         count_duplicate=is_end_of_path)
                 cpath = cpath[1:]
                 cparent = achild
             ret &= cret

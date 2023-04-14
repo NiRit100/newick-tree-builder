@@ -153,7 +153,7 @@ class Node:
     def add_child(self, 
                   child:'Node', 
                   dist_adjust_strategy=None,
-                  handle_duplicate:bool=True) -> tuple[bool,'Node']:
+                  count_duplicate:bool=True) -> tuple[bool,'Node']:
         """
         Adds the `child` node to `self`'s children. 
         
@@ -181,16 +181,15 @@ class Node:
             return (True, child)
         else:
             ochild = self.get_child_by_label(child.get_label())
-            if handle_duplicate:
-                if dist_adjust_strategy:
-                    adjusted_dist = dist_adjust_strategy(ochild, 
-                                                        child.get_distance())
-                    ochild.set_distance(adjusted_dist)
-                ochild.handle_duplicate(child)
+            if dist_adjust_strategy:
+                adjusted_dist = dist_adjust_strategy(ochild, 
+                                                    child.get_distance())
+                ochild.set_distance(adjusted_dist)
+            ochild.handle_duplicate(child, count=count_duplicate)
             return (False, ochild)
     
     
-    def handle_duplicate(self, other:'Node'):
+    def handle_duplicate(self, other:'Node', count=True):
         """
         Handles the case when a second node with the same `label` as 
         `self`'s was to be added to the parent, which is forbidden. 
@@ -210,9 +209,12 @@ class Node:
             other (Node): 
                 Node that was to be added but was declined because it 
                 has the same `label` as self.
+            count (bool, optional):
+                Whether or not to count this duplication.
         """
         # count duplicates
-        self._dupcount += 1
+        if count:
+            self._dupcount += 1
         # copy additional information
         s_ao = self.get_additional_info()
         for k, v in other.get_additional_info():
