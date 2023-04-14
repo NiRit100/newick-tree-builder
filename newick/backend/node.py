@@ -217,7 +217,9 @@ class Node:
             self._dupcount += 1
         # copy additional information
         s_ao = self.get_additional_info()
-        for k, v in other.get_additional_info():
+        o_ao = other.get_additional_info()
+        for k in o_ao.keys():
+            v = o_ao[k]
             if k in s_ao.keys():
                 if s_ao[k] != v:
                     if isinstance(v, set) and isinstance(s_ao[k], set):

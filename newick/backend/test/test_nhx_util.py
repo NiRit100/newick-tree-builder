@@ -1,10 +1,10 @@
 from newick.backend.nhx_util import *
 
 def test_generate_nhx_null():
-    assert generate_nhx(None) == "[&&NHX]"
+    assert generate_nhx(None) == ""
     
 def test_generate_nhx_empty():
-    assert generate_nhx(dict()) == "[&&NHX]"
+    assert generate_nhx(dict()) == ""
     
 def test_generate_nhx_alphanum():
     dct = {"A":1, "Bonn": None, 52: True}

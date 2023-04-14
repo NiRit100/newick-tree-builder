@@ -1,6 +1,6 @@
 def generate_nhx(dict:dict, ext_head='&&NHX') -> str:
     if dict == None or len(dict) == 0:
-        return "[" + ext_head + "]"
+        return ""
     else:
         ret_elements = []
         for key in dict.keys():
