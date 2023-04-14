@@ -56,15 +56,6 @@ class Node:
                 label = ""
             else:
                 label = str(label)
-        if len(label) < 1: 
-            msg = \
-                """
-                The `label` is not allowed to be the empty string.
-                If you want empty labels in the output, override the 
-                `outputlabel_mapper` argument in the `to_string()` 
-                function with somthing like `lambda n: ""`. 
-                """
-            raise ValueError(label, msg)
         if not isinstance(distance, float):
             distance = float(distance)
         if distance < 0:
