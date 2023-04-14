@@ -146,6 +146,7 @@ class Tree:
         # insert rest
         cpath = path[1:]
         while len(cpath) > 0:
+            is_end_of_path = (len(cpath) == 1)
             wlabel, wdist = cpath[0]
             wdist = self.node_dist_or_def(wdist)    
             waddinfo = additional_info if len(path) == 1 else dict()
@@ -153,7 +154,8 @@ class Tree:
                           distance=wdist, 
                           additional_info=waddinfo)
             cret, achild = cparent.add_child(wchild, 
-                                     self._dist_adjust_strat)
+                                     self._dist_adjust_strat,
+                                     handle_duplicate=is_end_of_path)
             cpath = cpath[1:]
             cparent = achild
         return cret
@@ -184,6 +186,7 @@ class Tree:
             # insert rest
             cpath = path[1:]
             while len(cpath) > 0:
+                is_end_of_path = (len(cpath) == 1)
                 wlabel, wdist = cpath[0]
                 wdist = self.node_dist_or_def(wdist)    
                 waddinfo = additional_info if len(path) == 1 else dict()
@@ -192,7 +195,8 @@ class Tree:
                                             distance=wdist, 
                                             additional_info=waddinfo)
                 cret, achild = cparent.add_child(wchild, 
-                                         self._dist_adjust_strat)
+                                         self._dist_adjust_strat,
+                                         handle_duplicate=is_end_of_path)
                 cpath = cpath[1:]
                 cparent = achild
             ret &= cret

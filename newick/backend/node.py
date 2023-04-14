@@ -152,7 +152,8 @@ class Node:
     
     def add_child(self, 
                   child:'Node', 
-                  dist_adjust_strategy=None) -> tuple[bool,'Node']:
+                  dist_adjust_strategy=None,
+                  handle_duplicate:bool=True) -> tuple[bool,'Node']:
         """
         Adds the `child` node to `self`'s children. 
         
@@ -180,11 +181,12 @@ class Node:
             return (True, child)
         else:
             ochild = self.get_child_by_label(child.get_label())
-            if dist_adjust_strategy:
-                adjusted_dist = dist_adjust_strategy(ochild, 
-                                                     child.get_distance())
-                ochild.set_distance(adjusted_dist)
-            ochild.handle_duplicate(child)
+            if handle_duplicate:
+                if dist_adjust_strategy:
+                    adjusted_dist = dist_adjust_strategy(ochild, 
+                                                        child.get_distance())
+                    ochild.set_distance(adjusted_dist)
+                ochild.handle_duplicate(child)
             return (False, ochild)
     
     
