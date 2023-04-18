@@ -1,3 +1,6 @@
+# special case: test file and output file
+*/test_file*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
