@@ -1,7 +1,8 @@
 from newick.backend.tree import Tree
-from newick.backend.node import RootNode
+from newick.backend.node import RootNode, Node
 from newick.backend.path import Path
 from newick.backend.util_funcs import format_int
+from typing import Callable
 from enum import Enum
 
 
@@ -19,10 +20,14 @@ def tree_parse_basic(text:str,
                      label_dist_sep:str=":", 
                      trim_sym:str='\r\n ',
                      blacklist:list[str]=["n.a.", "O", "Unclassified"],
-                     blacklist_token_strat:BlacklistTokenStrat=BlacklistTokenStrat.DROP_AFTER_FIRST) -> Tree:
+                     blacklist_token_strat:BlacklistTokenStrat=BlacklistTokenStrat.DROP_AFTER_FIRST,
+                     default_dist:float=2.0,
+                     dist_adjust_strategy:Callable[[Node,float],float]=None) -> Tree:
     index = 0
     lines = text.split(line_delim)
-    outtree = Tree(RootNode(root_label))
+    outtree = Tree(RootNode(root_label), 
+                   default_dist=default_dist,
+                   dist_adjust_strategy=dist_adjust_strategy)
     for line in lines:
         line = clean_token(line, trim_sym)
         if line != "":

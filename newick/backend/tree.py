@@ -79,7 +79,8 @@ class Tree:
         # write class fields 
         self._root = root_node
         self._default_dist = default_dist
-        self._dist_adjust_strat = dist_adjust_strategy
+        self._dist_adjust_strat = dist_adjust_strategy if dist_adjust_strategy \
+                                  else self._DIST_ADJUST_STRAT_AVERAGE_fn
         self._hybrids = dict()
         self._hybrid_ignore_set = set()
 
