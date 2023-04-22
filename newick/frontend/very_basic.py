@@ -21,13 +21,13 @@ def tree_parse_basic(text:str,
                      trim_sym:str='\r\n ',
                      blacklist:list[str]=["n.a.", "O", "Unclassified"],
                      blacklist_token_strat:BlacklistTokenStrat=BlacklistTokenStrat.DROP_AFTER_FIRST,
-                     default_dist:float=2.0,
+                     default_dist:float=1.0,
                      dist_adjust_strategy:Callable[[Node,float],float]=None) -> Tree:
     index = 0
     lines = text.split(line_delim)
     outtree = Tree(RootNode(root_label), 
-                   default_dist=default_dist,
-                   dist_adjust_strategy=dist_adjust_strategy)
+                   default_dist=default_dist)
+    outtree.set_dist_adjust_strat(dist_adjust_strategy)
     for line in lines:
         line = clean_token(line, trim_sym)
         if line != "":

@@ -79,10 +79,9 @@ class Tree:
         # write class fields 
         self._root = root_node
         self._default_dist = default_dist
-        self._dist_adjust_strat = dist_adjust_strategy if dist_adjust_strategy \
-                                  else self._DIST_ADJUST_STRAT_AVERAGE_fn
         self._hybrids = dict()
         self._hybrid_ignore_set = set()
+        self.set_dist_adjust_strat(dist_adjust_strategy)
 
     
     def node_dist_or_def(self, 
@@ -251,6 +250,18 @@ class Tree:
             ret |= cret
             is_first_path = False
         return ret
+    
+    
+    def set_dist_adjust_strat(self, dist_adjust_strat:Callable[[Node,float],float]):
+        """Sets the distance adjustment function of this tree. 
+
+        Args:
+            dist_adjust_strat (Callable[[Node,float],float])
+        """
+        if dist_adjust_strat:
+            self._dist_adjust_strat = dist_adjust_strat
+        else:
+            pass  # maybe throw error?
     
     
     def to_string(self,
