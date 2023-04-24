@@ -1,5 +1,9 @@
-clean:
-	mv -f dist/* dist-old/
+dist:
+	mkdir dist
+
+clean:  dist
+	rm -f dist/*
+	rm -rf logs/
 
 build:	clean
 	python3 -m build

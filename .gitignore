@@ -1,3 +1,7 @@
+# logs and dist-old folder
+logs/
+dist-old/
+
 # special case: test file and output file
 */test_file*
 
