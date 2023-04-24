@@ -38,7 +38,7 @@ def tree_parse_basic(text:str,
                 waypoint = clean_token(waypoint, trim_sym)
                 waypoint_split = waypoint.split(label_dist_sep)
                 if (waypoint in blacklist \
-                        or waypoint_split in blacklist):
+                        or waypoint_split[0] in blacklist):
                     match blacklist_token_strat:
                         case BlacklistTokenStrat.DROP_ENTIRE_LINE:
                             outpath = None

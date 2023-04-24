@@ -94,3 +94,4 @@ def test_file0():
         with open("./test_file0_out.tree", "w") as out:
             out_str = t.to_string()
             out.write(out_str)
+            
