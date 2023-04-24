@@ -184,7 +184,7 @@ def tree_parse_basic(text:str,
                 outpath.add(nlabel, ndist)
                 if flag_drop_after_token:
                     break
-            if outpath:
+            if outpath and len(outpath) > 1:
                 myaddinfo = {"_parse_index": { format_int(index) }}
                 outtree.add_new_node(outpath, 
                                     additional_info=myaddinfo)

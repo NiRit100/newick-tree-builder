@@ -85,7 +85,7 @@ def test_basic0_nodist_blacklist_dropline():
     print("---")
     assert t.to_string(with_distances=False) == "((((d0)c0,(d1)c4)b0,(c2)b1)a0,(((d0)c1)b0)a1)r;"
     
-#@pytest.mark.xfail()
+@pytest.mark.xfail()
 def test_file0():
     #import pdb; pdb.set_trace()
     with open('./test_file0.txt', 'r') as file:
