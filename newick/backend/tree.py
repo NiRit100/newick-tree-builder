@@ -30,7 +30,8 @@ class Tree:
     
     def _DIST_ADJUST_STRAT_ROLL2_fn(old_node:Node, new_dist:float) -> float:
         return (old_node.get_distance() + new_dist) / 2
-        
+    _DIST_ADJUST_STRAT_ROLL2 = _DIST_ADJUST_STRAT_ROLL2_fn    
+    
     def _DIST_ADJUST_STRAT_AVERAGE_fn(old_node:Node, new_dist:float) -> float:
         weighted_old_dist = (old_node.get_distance() * (old_node.get_duplication_count()+1))
         return (weighted_old_dist + new_dist) / (old_node.get_duplication_count()+2)
@@ -310,7 +311,7 @@ class Tree:
                 nodes (might differ for other kinds), so that a 
                 `Node` is mapped to its `Node._label`, which is the 
                 identification `label` (unique in its parent). 
-                Please note that your custom implementation would 
+                Please note that your custom implementation might 
                 have to take the differences between the different 
                 kinds of nodes into account.
 
