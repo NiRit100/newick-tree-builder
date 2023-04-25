@@ -84,16 +84,6 @@ def test_basic0_nodist_blacklist_dropline():
     print(t.to_string(with_distances=False))
     print("---")
     assert t.to_string(with_distances=False) == "((((d0)c0,(d1)c4)b0,(c2)b1)a0,(((d0)c1)b0)a1)r;"
-    
-def test_bla():
-    txt = """
-    Heunggongvirae,Uroviricota,Caudoviricetes,Caudovirales,O,O,O;
-    n.a.,n.a.,n.a.,n.a.,n.a.,n.a.,n.a.;
-    Heunggongvirae,Uroviricota,Caudoviricetes,Caudovirales,Demerecviridae,Ermolyevavirinae,Unclassified;
-    """
-    t = tree_parse_basic(txt, "r", blacklist_token_strat=BlacklistTokenStrat.IGNORE_BLACKLIST)
-    print(t.to_string())
-    assert False
 
 @pytest.mark.xfail()
 def test_file0():
