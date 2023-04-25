@@ -106,7 +106,10 @@ class Tree:
             return self._dist_adjust_strat
     
     
+    # forward some constructors
+    
     RootNode = RootNode
+    Path = Path
     
     
     def reg_hybrid_id(self,
@@ -254,7 +257,10 @@ class Tree:
     
     
     def set_dist_adjust_strat(self, dist_adjust_strat:Callable[[Node,float],float]):
-        """Sets the distance adjustment function of this tree. 
+        """
+        Sets the distance adjustment function of this tree. 
+        It is recommended to use one of the built-in 
+        _DIST_ADJUST_STRAT, but you can easily build your own.
 
         Args:
             dist_adjust_strat (Callable[[Node,float],float])
