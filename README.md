@@ -172,3 +172,8 @@ This project is published under the CC0 license, so it is basically Public Domai
 Feel free to contribute, fork, copy, steal, shoot to the moon or burn.
 
 To the students of you: Please notice that that does not free you from having to cite this code if you choose use it. 
+
+
+----
+
+\* New parsers may bring dependencies with them in the future.
