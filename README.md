@@ -2,7 +2,7 @@
 
 **A small, stand-alone**\* **library for making trees in [New Hampshire notation (also known as Newick format)](https://en.wikipedia.org/wiki/Newick_format).**
 
-For releases, see [PyPI](https://pypi.org/manage/project/newick-tree-builder/releases/).
+For releases, see [PyPI](https://pypi.org/project/newick-tree-builder/).
 
 _Note that this library is basically just a notation converter. It does not visualize the trees and it has no CLI built-in. It consists of a parser front-end and, mostly, a backend providing the newick tree data structure._
 
