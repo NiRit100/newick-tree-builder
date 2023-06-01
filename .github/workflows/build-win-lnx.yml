@@ -1,0 +1,116 @@
+name: Package Application with Pyinstaller
+
+on:
+  push:
+    tags:
+    - 'build-action-test**'
+    - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+
+  build-win:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: remove 'hooksconfig' from .spec
+      run:  make spec-remove-hooksconfig
+
+    - name: Package Application for Windows
+      uses: NiRit100/pyinstaller-action-windows@0.1.1-a
+      with:
+        path: .
+
+    - run: |
+        make _dist_out
+        cp -t "_dist_out/win/" "dist/windows/"*
+        mv "_dist_out/win/__main__.exe" "_dist_out/win/wintraceroute.exe"
+        zip -j "_dist_out/win/wintraceroute-windows-x64-binary.zip" "_dist_out/win/"*
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Windows Standalone Binary
+        path: ./_dist_out/win/
+
+#    - uses: softprops/action-gh-release@v1
+#      if: startsWith(github.ref, 'refs/tags/')
+#      with:
+#        files: "_dist_out/win/wintraceroute-windows-x64-binary.zip"
+#        draft: true
+
+  build-lnx:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        # Semantic version range syntax or exact version of a Python version
+        python-version: '3.11'
+        # Optional - x64 or x86 architecture, defaults to x64
+        architecture: 'x64'
+
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install -r requirements.txt
+
+    - name: Package Application for Linux
+      run: |
+        make build_lnx
+        zip -j "_dist_out/lnx/wintraceroute-linux-x64-binary.zip" "_dist_out/lnx/"*
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Linux Binary
+        path: ./_dist_out/lnx/
+
+# dont publish binary for linux
+#    - uses: softprops/action-gh-release@v1
+#      if: startsWith(github.ref, 'refs/tags/')
+#      with:
+#        files: "_dist_out/lnx/wintraceroute-linux-x64-binary.zip"
+#        draft: true
+
+  build-pypi:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        # Semantic version range syntax or exact version of a Python version
+        python-version: '3.11'
+        # Optional - x64 or x86 architecture, defaults to x64
+        architecture: 'x64'
+
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        python3 -m pip install -r requirements.txt
+        python3 -m pip install --upgrade twine
+
+#    - name: Package Application for PyPI and Upload
+#      run: |
+#        make clean
+#        PYPI_UNAME="${{secrets.PYPI_UNAME}}" PYPI_PASSWD="${{secrets.PYPI_PASSWD}}" make upload_pypi
+
+    - name: Package Application for PyPI
+      run: |
+        make clean
+        make build_py
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Python Packages
+        path: ./dist/
