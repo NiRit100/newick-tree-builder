@@ -97,6 +97,17 @@ class Node:
         """
         return label in self._children_by_label.keys()
     
+    def contains_child_with_any_label(self, labels) -> bool:
+        """
+        Determines for a collection of labels whether any of them
+        is the label of a child of `self`.
+        
+        Returns:
+            bool:
+                `True` iff a child with one of the `labels` exists here.
+        """
+        return any(item in self._children_by_label.keys() for item in labels)
+    
     def count_children(self) -> int:
         """Counts `self`'s children.
 
