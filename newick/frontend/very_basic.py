@@ -111,6 +111,10 @@ def tree_parse_basic(text:str,
             DROP_TOKEN:
                 Drop (i.e. do not process) blacklisted tokens and the
                 tokens of the rest of the path (children).
+                The parent node of the dropped token will now have 
+                a `"_had_blacklisted_child"=="True"` flag set in the 
+                additional_info dictionary. This will be `False`
+                otherwise.
             DROP_AFTER_FIRST:
                 Drop (i.e. do not process) *not* the blacklisted token
                 itself, but their children.
