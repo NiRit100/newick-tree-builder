@@ -162,6 +162,7 @@ def tree_parse_basic(text:str,
         if line != "":
             waypoints = line.split(waypoint_sep)
             outpath = Path(root_label=root_label)
+            has_blacklisted_child = False # for DROP_TOKEN strat
             for waypoint in waypoints:
                 flag_drop_after_token = False
                 waypoint = clean_token(waypoint, trim_sym)
@@ -173,6 +174,7 @@ def tree_parse_basic(text:str,
                             outpath = None
                             break
                         case BlacklistTokenStrat.DROP_TOKEN:
+                            has_blacklisted_child = True
                             break
                         case BlacklistTokenStrat.DROP_AFTER_FIRST:
                             flag_drop_after_token = True
@@ -186,6 +188,8 @@ def tree_parse_basic(text:str,
                     break
             if outpath and len(outpath) > 1:
                 myaddinfo = {"_parse_index": { format_int(index) }}
+                if blacklist_token_strat == BlacklistTokenStrat.DROP_TOKEN:
+                    myaddinfo["_had_blacklisted_child"] = has_blacklisted_child
                 outtree.add_new_node(outpath, 
                                     additional_info=myaddinfo)
         index += 1
