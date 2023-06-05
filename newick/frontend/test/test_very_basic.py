@@ -91,10 +91,10 @@ def test_basic0_nodist_blacklist_drop():
     t = tree_parse_basic(txt, "r", blacklist_token_strat=BlacklistTokenStrat.DROP_TOKEN)
     print("---")
     print(t.to_string(with_distances=False))
-    print(t._root.get_child_by_label("a0").to_string(with_additional_info_nhx=True))
+    print("Node a0 with nhx:   " + t._root.get_child_by_label("a0").to_string(with_additional_info_nhx=True))
     print("---")
     assert t.to_string(with_distances=False) == "((((d0)c0,(d1)c4)b0,(c2)b1)a0,(((d0)c1)b0)a1)r;"
-    assert t._root.get_child_by_label("a0").get_additional_info()["_had_blacklisted_child"]
+    assert t._root.get_child_by_label("a0").get_additional_info()["_had_blacklisted_child"] == True
         
 def test_basic0_nodist_blacklist_dropline():
     txt = """
